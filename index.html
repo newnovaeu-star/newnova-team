@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>NEW NØVA · Plan semanal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Expletus+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NEW NØVA">
+<meta name="theme-color" content="#F3F2EF">
+<style>
+  :root{
+    --bg:#F3F2EF;
+    --surface:#FBFAF8;
+    --surface-2:#EAE8E4;
+    --border:#D8D6D2;
+    --text:#1C1C1E;
+    --ink:#0E0E0E;
+    --muted:#5C5C5F;
+    --accent:#0E0E0E;
+    --accent-soft:rgba(14,14,14,.08);
+    --teal:#4F554A;
+    --teal-soft:rgba(79,85,74,.14);
+    --gold:#8C7A55;
+    --gold-soft:rgba(140,122,85,.16);
+    --green:#8A8781;
+    --green-soft:rgba(138,135,129,.20);
+    --olive:#4F554A;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    padding-bottom:48px;
+  }
+
+  /* Header */
+  header{padding:24px 16px 16px;max-width:480px;margin:0 auto;}
+  .head-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+  .eyebrow{color:var(--muted);font-size:13px;margin:0 0 2px;}
+  h1{
+    font-family:'Expletus Sans','Inter',sans-serif;
+    font-weight:600;
+    font-size:26px;
+    letter-spacing:.2px;
+    margin:0 0 14px;
+    line-height:1.15;
+  }
+  .head-icons{display:flex;gap:8px;flex:0 0 auto;}
+  .icon-btn{
+    width:38px;height:38px;border-radius:10px;
+    background:var(--surface);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;margin-top:2px;
+  }
+  .icon-btn svg{width:17px;height:17px;stroke:var(--text);}
+  .icon-btn.active{background:var(--accent);border-color:var(--accent);}
+  .icon-btn.active svg{stroke:#F3F2EF;}
+  .goals{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+  }
+  .goal{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:9px 6px;
+    text-align:center;
+  }
+  .goal .val{font-family:'Expletus Sans','Inter',sans-serif;font-size:15px;font-weight:600;display:block;}
+  .goal .lab{font-size:10.5px;color:var(--muted);display:block;margin-top:2px;line-height:1.25;}
+
+  /* View tabs */
+  .view-tabs{
+    display:flex;gap:8px;
+    max-width:480px;margin:0 auto;padding:14px 16px 0;
+  }
+  .view-tab{
+    flex:1;text-align:center;
+    padding:10px;border-radius:10px;
+    background:var(--surface);border:1px solid var(--border);
+    color:var(--muted);font-weight:600;font-size:13.5px;
+    cursor:pointer;
+  }
+  .view-tab.active{background:var(--accent);color:#F3F2EF;border-color:transparent;}
+
+  /* Day pills (plantilla) */
+  nav.days{
+    position:sticky; top:0; z-index:10;
+    background:var(--bg);
+    padding:12px 16px 10px;
+    display:flex; gap:8px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    border-bottom:1px solid var(--border);
+    max-width:480px;margin:0 auto;
+  }
+  nav.days::-webkit-scrollbar{display:none;}
+  .pill{
+    flex:0 0 auto;
+    background:var(--surface);
+    border:1px solid var(--border);
+    color:var(--muted);
+    border-radius:999px;
+    padding:9px 14px;
+    font-size:13.5px;
+    font-weight:600;
+    display:flex; align-items:center; gap:6px;
+    cursor:pointer;
+    transition:background .15s, color .15s, border-color .15s;
+    white-space:nowrap;
+  }
+  .pill .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto;}
+  .pill.active{ color:var(--bg); border-color:transparent;}
+  .pill.active .dot{background:var(--bg) !important;}
+
+  main{max-width:480px;margin:0 auto;padding:18px 16px 0;}
+
+  /* Calendar */
+  .cal-stats{display:flex;gap:8px;margin-bottom:14px;}
+  .cal-stat{
+    flex:1;background:var(--surface);border:1px solid var(--border);
+    border-radius:10px;padding:10px 12px;
+  }
+  .cal-stat .val{font-family:'Expletus Sans','Inter',sans-serif;font-size:19px;font-weight:600;display:flex;align-items:center;gap:6px;}
+  .cal-stat .lab{font-size:11px;color:var(--muted);margin-top:2px;}
+  .cal-stat.streak .val{color:var(--accent);}
+
+  .month-nav{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .month-nav h2{
+    font-family:'Expletus Sans','Inter',sans-serif;font-size:19px;font-weight:600;margin:0;
+    text-transform:capitalize;
+  }
+  .month-nav .arrows{display:flex;gap:6px;align-items:center;}
+  .nav-btn{
+    width:32px;height:32px;border-radius:8px;
+    background:var(--surface);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .nav-btn svg{width:14px;height:14px;stroke:var(--text);}
+  .today-btn{
+    font-size:12px;font-weight:600;color:var(--muted);
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:8px;padding:0 10px;height:32px;cursor:pointer;
+  }
+
+  .weekday-row{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px;}
+  .weekday-row span{text-align:center;font-size:11.5px;color:var(--muted);font-weight:600;}
+
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:6px;margin-bottom:18px;}
+  .cal-cell{display:flex;align-items:center;justify-content:center;padding:2px 0;}
+  .cal-day{
+    width:38px;height:38px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13.5px;font-weight:600;
+    border:1.5px solid var(--border);
+    color:var(--text);
+    cursor:pointer;
+    position:relative;
+  }
+  .cal-day.dim{border-color:var(--surface-2);color:#B5B3AE;}
+  .cal-day.today{border-color:var(--accent);color:var(--accent);}
+  .cal-day.selected{box-shadow:0 0 0 2px var(--text);}
+  .cal-day.done{border-color:transparent;color:#fff;}
+  .cal-day.done svg{width:15px;height:15px;stroke:#fff;fill:none;}
+  .cal-day.done.icon-flame svg{fill:#fff;stroke:none;}
+
+  .session-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px;}
+  .session-title{font-family:'Expletus Sans','Inter',sans-serif;font-size:21px;font-weight:600;margin:0;}
+  .session-date{color:var(--muted);font-size:12.5px;margin:0 0 2px;text-transform:capitalize;}
+  .session-sub{color:var(--muted);font-size:13.5px;margin:4px 0 16px;line-height:1.45;}
+  .badge{
+    font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:7px;
+    white-space:nowrap;
+  }
+
+  .complete-row{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:10px;padding:10px 12px;margin-bottom:16px;
+  }
+  .complete-row span{font-size:13px;color:var(--muted);}
+  .complete-toggle{
+    font-size:12.5px;font-weight:600;border-radius:8px;padding:7px 12px;
+    border:1px solid var(--border);background:var(--surface-2);color:var(--text);cursor:pointer;
+  }
+  .complete-toggle.on{background:var(--green);border-color:transparent;color:#0E0E0E;}
+
+  .override-row{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-size:12px;color:var(--muted);margin-bottom:14px;
+  }
+  .override-row button{
+    font-size:12px;font-weight:600;color:var(--accent);background:none;border:none;cursor:pointer;padding:0;
+  }
+
+  [contenteditable="true"]{outline:none;}
+  .editing [contenteditable="true"]{
+    border:1px dashed var(--muted);
+    border-radius:6px;
+    padding:2px 5px;
+    margin:-2px -5px;
+  }
+  .editing [contenteditable="true"]:focus{border-color:var(--accent);}
+  .editing .badge[contenteditable="true"]{padding:4px 8px;}
+
+  .adapt{
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--surface);
+    border:1px dashed var(--border);
+    border-radius:10px;
+    padding:10px 12px;
+    margin-bottom:16px;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .adapt button{
+    background:var(--surface-2);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:7px 11px;
+    font-size:12.5px;
+    font-weight:600;
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+  }
+  .adapt.on{border-style:solid;}
+  .adapt.on button{background:var(--accent);color:#F3F2EF;border-color:transparent;}
+
+  .block{margin-bottom:20px;}
+  .block-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
+  .block-title{
+    font-size:12.5px;
+    color:var(--muted);
+    font-weight:600;
+    margin:0;
+    flex:1;
+  }
+  .del-block{
+    flex:0 0 auto;width:20px;height:20px;border-radius:6px;
+    background:var(--surface-2);border:1px solid var(--border);color:var(--muted);
+    font-size:13px;line-height:1;cursor:pointer;
+  }
+  .progress-wrap{
+    height:5px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-bottom:14px;
+  }
+  .progress-bar{height:100%;width:0%;background:var(--accent);transition:width .25s;}
+
+  .item{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px 13px;
+    display:flex;
+    align-items:flex-start;
+    gap:11px;
+    margin-bottom:8px;
+    transition:opacity .2s;
+  }
+  .item.done{opacity:.45;}
+  .item.done .ex-name{text-decoration:line-through;}
+  .check{
+    width:21px;height:21px;border-radius:6px;border:1.5px solid var(--border);
+    flex:0 0 auto;margin-top:1px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    background:var(--surface-2);
+  }
+  .check svg{width:13px;height:13px;opacity:0;}
+  .item.done .check{background:var(--accent);border-color:var(--accent);}
+  .item.done .check svg{opacity:1;}
+  .item-body{flex:1;min-width:0;}
+  .ex-name{font-size:14.5px;font-weight:600;margin:0;}
+  .ex-detail{font-size:13px;color:var(--muted);margin:3px 0 0;line-height:1.4;}
+  .del-item{
+    flex:0 0 auto;width:22px;height:22px;border-radius:7px;margin-top:1px;
+    background:var(--surface-2);border:1px solid var(--border);color:var(--muted);
+    font-size:14px;line-height:1;cursor:pointer;
+  }
+
+  .add-row{
+    border:1px dashed var(--border);
+    border-radius:12px;
+    padding:11px 13px;
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    margin-bottom:8px;
+  }
+  .add-block-row{margin-top:4px;margin-bottom:20px;}
+
+  .note{
+    font-size:12.5px;
+    color:var(--muted);
+    background:var(--surface);
+    border-left:2px solid var(--accent);
+    border-radius:6px;
+    padding:9px 11px;
+    margin:2px 0 18px;
+    line-height:1.5;
+  }
+
+  .ladder{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 16px;}
+  .rep-box{
+    width:38px;height:38px;border-radius:9px;
+    background:var(--surface);
+    border:1.5px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:600;color:var(--muted);
+    cursor:pointer;
+  }
+  .rep-box.done{background:var(--teal);border-color:var(--teal);color:#F3F2EF;}
+
+  .paceinput{
+    display:flex;align-items:center;gap:8px;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:10px;padding:10px 12px;margin-bottom:18px;
+  }
+  .paceinput label{font-size:12.5px;color:var(--muted);flex:1;}
+  .paceinput input{
+    width:76px;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:7px;color:var(--text);font-family:'Inter',sans-serif;
+    font-size:14px;padding:6px 8px;text-align:center;
+  }
+
+  .daynotes{margin-bottom:20px;}
+  .daynotes textarea{
+    width:100%;min-height:80px;resize:vertical;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;
+    font-size:13.5px;padding:11px 12px;line-height:1.5;
+  }
+  .daynotes textarea::placeholder{color:var(--muted);}
+
+  .edit-bar{
+    position:sticky;
+    bottom:0;
+    max-width:480px;margin:24px auto 0;
+    background:var(--surface);
+    border-top:1px solid var(--border);
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    display:flex;gap:10px;
+  }
+  .edit-bar button{
+    flex:1;
+    border-radius:10px;
+    padding:12px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:13.5px;
+    cursor:pointer;
+    border:1px solid var(--border);
+  }
+  .edit-bar .save{background:var(--accent);color:#F3F2EF;border-color:transparent;}
+  .edit-bar .done{background:var(--surface-2);color:var(--text);}
+
+  footer{
+    max-width:480px;margin:26px auto 0;padding:0 16px;
+    color:var(--muted);font-size:11.5px;text-align:center;line-height:1.6;
+  }
+
+  .modal-overlay{
+    display:none;
+    position:fixed;inset:0;
+    background:rgba(14,14,14,.45);
+    z-index:100;
+    align-items:flex-end;
+    justify-content:center;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px 16px 0 0;
+    padding:20px 18px calc(20px + env(safe-area-inset-bottom));
+    width:100%;max-width:480px;
+    max-height:88vh;overflow-y:auto;
+  }
+  .modal h3{font-family:'Expletus Sans','Inter',sans-serif;font-size:18px;font-weight:600;margin:0 0 10px;}
+  .modal label{
+    display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:12px;
+  }
+  .modal label input{
+    display:block;width:100%;margin-top:6px;
+    background:var(--surface-2);border:1px solid var(--border);
+    border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;
+    font-size:14px;padding:9px 10px;
+  }
+  .modal-note{font-size:12px;color:var(--muted);line-height:1.5;margin:0 0 14px;}
+  .modal-note code{background:var(--surface-2);padding:1px 5px;border-radius:5px;}
+  .modal-status{
+    font-size:12.5px;color:var(--text);background:var(--surface-2);
+    border-radius:8px;padding:8px 10px;margin-bottom:14px;
+  }
+  .modal-actions{display:flex;flex-wrap:wrap;gap:8px;}
+  .mbtn{
+    flex:1 1 calc(50% - 4px);
+    border-radius:9px;padding:11px;
+    font-family:'Inter',sans-serif;font-weight:600;font-size:13px;
+    border:1px solid var(--border);background:var(--surface-2);color:var(--text);
+    cursor:pointer;
+  }
+  .mbtn.primary{background:var(--accent);color:#F3F2EF;border-color:transparent;}
+  .mbtn.ghost{background:transparent;}
+
+  ::selection{background:var(--accent);color:#F3F2EF;}
+
+  /* ===== NEW NØVA · tema hueso ===== */
+  h1{color:var(--ink);font-weight:500;letter-spacing:.02em;}
+  .brandbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:22px;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand .star{height:38px;width:auto;flex:0 0 auto;display:block;}
+  .brand .wm{font-family:'Expletus Sans','Inter',sans-serif;font-weight:400;font-size:16px;letter-spacing:.38em;line-height:1;white-space:nowrap;color:var(--ink);}
+  .brand .wm small{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.6em;color:var(--teal);margin-top:7px;padding-left:2px;}
+  .brandbar .icon-btn{margin-top:0;}
+  .eyebrow,.goal .lab,.cal-stat .lab,.session-date,footer{font-family:'IBM Plex Mono',monospace;letter-spacing:.03em;}
+  .goal .val,.cal-stat .val{font-weight:500;color:var(--ink);}
+  .session-title{color:var(--ink);font-weight:500;}
+  .icon-btn.active svg{stroke:#F3F2EF;}
+  @media (max-width:380px){ .brandbar .icon-btn{width:34px;height:34px;} .brand .wm{font-size:13px;letter-spacing:.3em;} .brand .star{height:30px;} .head-icons{gap:5px;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brandbar">
+    <div class="brand"><svg class="star" viewBox="97.488 92.293 180.024 189.374" aria-label="NEW NØVA"><polygon points="187.5,92.293 194.426,165.344 243.238,110.297 205.848,173.653 277.512,157.727 210.004,186.809 277.512,216.234 205.848,200.309 243.238,263.664 194.426,208.273 187.5,281.667 180.574,208.273 131.762,263.664 169.152,200.309 97.488,216.234 164.996,186.809 97.488,157.727 169.152,173.653 131.762,110.297 180.574,165.344" fill="#0E0E0E"/></svg><div class="wm">NEW NØVA<small>T E A M</small></div></div>
+    <div class="head-icons">
+      <div class="icon-btn" id="syncBtn" title="Sincronizar con GitHub">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 4v5h5M20 20v-5h-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.6 15A8 8 0 0019.8 9M19.4 9A8 8 0 004.2 15" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="icon-btn" id="saveBtn" title="Descargar copia de seguridad">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke-width="2" stroke-linejoin="round"/><path d="M17 21v-8H7v8M7 3v5h8" stroke-width="2" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="icon-btn" id="editToggle" title="Editar">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 20h9" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke-width="2" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </div>
+  <p class="eyebrow">Fuerza + Hyrox + fondo</p>
+  <h1>Tu plan, día a día</h1>
+  <div class="goals">
+    <div class="goal"><span class="val">&lt;40'</span><span class="lab">10K</span></div>
+    <div class="goal"><span class="val">70km</span><span class="lab">Bici dom.</span></div>
+    <div class="goal"><span class="val">2000m</span><span class="lab">Natación fluida</span></div>
+    <div class="goal"><span class="val">6x</span><span class="lab">Vueltas circuito</span></div>
+  </div>
+</header>
+
+<div class="modal-overlay" id="ghModal">
+  <div class="modal">
+    <h3>Sincronizar con GitHub</h3>
+    <p class="modal-note">Cada entreno que marques (o cambio que hagas) se subirá a un archivo <code>log.json</code> en tu repositorio, además de guardarse en este móvil. Así no depende solo de este navegador.</p>
+    <label>Usuario u organización de GitHub<input id="ghOwner" type="text" placeholder="hectorsaez23" autocapitalize="off" autocorrect="off"></label>
+    <label>Repositorio<input id="ghRepo" type="text" placeholder="rutina-hyrox" autocapitalize="off" autocorrect="off"></label>
+    <label>Rama<input id="ghBranch" type="text" placeholder="main" autocapitalize="off" autocorrect="off"></label>
+    <label>Archivo de registro<input id="ghPath" type="text" placeholder="log.json" autocapitalize="off" autocorrect="off"></label>
+    <label>Token de acceso personal<input id="ghToken" type="password" placeholder="ghp_..." autocapitalize="off" autocorrect="off"></label>
+    <p class="modal-note">Crea el token en GitHub → Settings → Developer settings → Fine-grained tokens. Dale acceso solo a este repositorio y solo permiso de lectura/escritura sobre "Contents". No lo compartas — se guarda únicamente en este móvil, nunca en el archivo que subes al repo.</p>
+    <div class="modal-status" id="ghStatus">Sin configurar</div>
+    <div class="modal-actions">
+      <button class="mbtn primary" id="ghSaveCfg">Guardar</button>
+      <button class="mbtn" id="ghSyncNow">Sincronizar ahora</button>
+      <button class="mbtn" id="ghLoadNow">Cargar desde GitHub</button>
+      <button class="mbtn ghost" id="ghClose">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="view-tabs">
+  <div class="view-tab" id="tabCalendar">Calendario</div>
+  <div class="view-tab" id="tabTemplate">Plantilla semanal</div>
+</div>
+
+<nav class="days" id="dayNav" style="display:none;"></nav>
+
+<main id="main"></main>
+
+<footer id="footerNote">Guardado automáticamente en este dispositivo · usa el icono de descarga para hacer una copia del archivo</footer>
+
+<script type="application/json" id="data-store">
+{
+  "weekTemplate": [
+    {
+      "id":"lun", "name":"Lunes", "color":"accent", "icon":"dumbbell",
+      "title":"Fuerza + core", "badge":"Fuerza",
+      "sub":"Circuito de fuerza básica en formato de vueltas, cerrando con core.",
+      "adaptable":true,
+      "blocks":[
+        { "title":"Circuito · 1 min trabajo / 2 min descanso · 6 vueltas", "items":[
+          {"ex":"Dominadas", "detail":"12 repeticiones"},
+          {"ex":"Press vertical con barra", "detail":"20 repeticiones"},
+          {"ex":"Remo gorila con kettlebells", "detail":"20 repeticiones por brazo"},
+          {"ex":"Apertura de hombros", "detail":"20 repeticiones"}
+        ]},
+        { "title":"Core (10-12 min)", "items":[
+          {"ex":"Plancha", "detail":"4 series al fallo técnico"},
+          {"ex":"Rodillas al pecho colgado", "detail":"4x12"},
+          {"ex":"Pallof press", "detail":"3x12 por lado"}
+        ]}
+      ],
+      "altNote":"Con piernas cargadas: mantén el circuito de tren superior tal cual, pero cambia el core por 15 min de movilidad de cadera y tobillo."
+    },
+    {
+      "id":"mar", "name":"Martes", "color":"gold", "icon":"stopwatch",
+      "title":"Pista · series 800m", "badge":"Velocidad",
+      "sub":"Fijo cada semana. El objetivo es bajar el ritmo medio hacia 3:59/km para el sub-40.",
+      "adaptable":false,
+      "blocks":[
+        { "title":"Calentamiento", "items":[
+          {"ex":"Trote suave", "detail":"12-15 min"},
+          {"ex":"Movilidad + progresiones", "detail":"4x80m"}
+        ]},
+        { "title":"Serie principal", "items":[
+          {"ex":"8 x 800m", "detail":"Ritmo objetivo 3:10-3:12 por 800m, recuperación 90\"-2' trote suave"}
+        ]},
+        { "title":"Vuelta a la calma", "items":[
+          {"ex":"Trote muy suave", "detail":"10 min"}
+        ]}
+      ],
+      "ladder":8,
+      "ladderLabel":"Marca cada 800m completado a ritmo",
+      "pace":true,
+      "note":"Progresión cada 2-3 semanas: sube a 10x800m o ajusta el tiempo objetivo por serie."
+    },
+    {
+      "id":"mie", "name":"Miércoles", "color":"accent", "icon":"flame",
+      "title":"Hyrox · puntos débiles", "badge":"Hyrox",
+      "sub":"Carrera comprometida: 400m + estación, rotando 5-6 vueltas. Aquí se construye la resistencia a la fatiga para tus simulacros.",
+      "adaptable":true,
+      "blocks":[
+        { "title":"400m + estación · x5-6 vueltas", "items":[
+          {"ex":"Wallballs", "detail":"20-25 repeticiones"},
+          {"ex":"Zancadas", "detail":"20 repeticiones totales"},
+          {"ex":"Trineo empuje", "detail":"20-25 metros"},
+          {"ex":"Burpees", "detail":"15 repeticiones"}
+        ]}
+      ],
+      "altNote":"Con piernas cargadas: baja el volumen a 3-4 vueltas y cambia zancadas y trineo por burpees y wallballs a menor intensidad, priorizando técnica."
+    },
+    {
+      "id":"jue", "name":"Jueves", "color":"teal", "icon":"waves",
+      "title":"Natación + movilidad", "badge":"Técnica",
+      "sub":"Foco en técnica y fondo, construyendo hacia los 2000m fluidos.",
+      "adaptable":false,
+      "blocks":[
+        { "title":"Sesión en piscina", "items":[
+          {"ex":"Calentamiento", "detail":"400m suave"},
+          {"ex":"Técnica", "detail":"400m con drills de catch + respiración bilateral"},
+          {"ex":"Serie de fondo", "detail":"6-8 x 100m, salida cada 2' — baja el descanso o sube la distancia cada semana"},
+          {"ex":"Vuelta a la calma", "detail":"200m suave"}
+        ]},
+        { "title":"Movilidad (15 min)", "items":[
+          {"ex":"Cadera", "detail":"Movilidad articular + apertura"},
+          {"ex":"Hombro", "detail":"Rotaciones + banda elástica"}
+        ]}
+      ],
+      "note":"Meta de progresión: enlazar los 2000m fluidos bajando descansos antes que subiendo velocidad."
+    },
+    {
+      "id":"vie", "name":"Viernes", "color":"accent", "icon":"dumbbell",
+      "title":"Fuerza (variante) + tempo", "badge":"Fuerza",
+      "sub":"Segundo circuito de fuerza con otra combinación, seguido de un rodaje progresivo corto.",
+      "adaptable":true,
+      "blocks":[
+        { "title":"Circuito · mismo formato de vueltas", "items":[
+          {"ex":"Sentadillas", "detail":"15 repeticiones"},
+          {"ex":"Zancadas", "detail":"20 repeticiones"},
+          {"ex":"Chest press", "detail":"15 repeticiones"},
+          {"ex":"Dominadas", "detail":"10 repeticiones"}
+        ]},
+        { "title":"Carrera", "items":[
+          {"ex":"Rodaje progresivo", "detail":"20-25 min, últimos 2km cerca del ritmo objetivo de 10k"}
+        ]}
+      ],
+      "altNote":"Con piernas cargadas: mantén el circuito bajando a 4 vueltas y sustituye el tempo por 20 min de bici suave."
+    },
+    {
+      "id":"sab", "name":"Sábado", "color":"gold", "icon":"flame",
+      "title":"Doble · simulacro o mantenimiento", "badge":"Variable",
+      "sub":"Cada 3-4 semanas: tu propio simulacro Hyrox completo, sin competir, a sensaciones. El resto de sábados, doble sesión suave.",
+      "adaptable":true,
+      "blocks":[
+        { "title":"Semana de simulacro (cada 3-4 semanas)", "items":[
+          {"ex":"Simulacro Hyrox propio", "detail":"8 estaciones + carreras entre medio, a tu ritmo"}
+        ]},
+        { "title":"Resto de sábados — doble sesión", "items":[
+          {"ex":"AM: fuerza ligera o técnica de carrera", "detail":"Volumen bajo, foco en calidad"},
+          {"ex":"PM: movilidad + core", "detail":"20-25 min"}
+        ]}
+      ],
+      "altNote":"Con piernas cargadas: cancela el simulacro esa semana y quédate solo con la doble sesión suave."
+    },
+    {
+      "id":"dom", "name":"Domingo", "color":"green", "icon":"bike",
+      "title":"Tirada larga / Bici", "badge":"Fondo",
+      "sub":"Fijo cada semana, alternando entre tirada larga a pie y salida en bici.",
+      "adaptable":false,
+      "blocks":[
+        { "title":"Semana A — Tirada larga", "items":[
+          {"ex":"Rodaje largo", "detail":"12-15km a ritmo controlado, con opción de progresión final"}
+        ]},
+        { "title":"Semana B — Bici", "items":[
+          {"ex":"Salida larga", "detail":"~70km a ritmo aeróbico"}
+        ]}
+      ],
+      "note":"Alterna semana A y semana B para no acumular impacto en las piernas dos domingos seguidos."
+    }
+  ],
+  "overrides":{},
+  "completed":{},
+  "logs":{}
+}
+</script>
+
+<script>
+const PRISTINE_HTML = document.documentElement.outerHTML;
+
+const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9.5 18L20 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+const ICONS = {
+  dumbbell:'<svg viewBox="0 0 24 24" fill="none"><path d="M4 9v6M2 10v4M20 9v6M22 10v4M7 12h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  stopwatch:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="2"/><path d="M12 13V9M9 3h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  flame:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2c1 4-4 5-4 9a4 4 0 008 0c0-1.5-1-2-1-3.5 1.5 1 2.5 3 2.5 5A5.5 5.5 0 0112 18a5.5 5.5 0 01-5.5-5.5C6.5 8 9 6 12 2z"/></svg>',
+  waves:'<svg viewBox="0 0 24 24" fill="none"><path d="M2 9c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M2 15c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  bike:'<svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="17" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="17" r="3" stroke="currentColor" stroke-width="2"/><path d="M6 17l4-8h4l3 8M10 9h4M13 5h3l2 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+};
+
+const STORAGE_KEY = 'nova-plan-v1';
+
+function loadFromStorage(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){ console.warn('No se pudo leer el guardado local', e); }
+  return null;
+}
+function saveToStorage(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ weekTemplate, overrides, completed, logs }));
+    setSaveIndicator(true);
+  }catch(e){
+    console.warn('No se pudo guardar automáticamente', e);
+    setSaveIndicator(false);
+  }
+}
+function setSaveIndicator(ok){
+  const el = document.getElementById('footerNote');
+  if(!el) return;
+  el.textContent = ok
+    ? 'Guardado automáticamente en este dispositivo · usa el icono ⇄ para sincronizar con GitHub'
+    : 'No se pudo guardar en este dispositivo — usa el icono de descarga para no perder los cambios';
+}
+
+/* ---------- Sincronización con GitHub ---------- */
+const GH_CONFIG_KEY = 'nova-github-config';
+
+function loadGithubConfig(){
+  try{
+    const raw = localStorage.getItem(GH_CONFIG_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+function saveGithubConfig(cfg){
+  try{ localStorage.setItem(GH_CONFIG_KEY, JSON.stringify(cfg)); }catch(e){}
+}
+function ghHeaders(token){
+  return { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github+json' };
+}
+function setSyncStatus(msg){
+  const el = document.getElementById('ghStatus');
+  if(el) el.textContent = msg;
+}
+function b64EncodeUtf8(str){
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function b64DecodeUtf8(str){
+  return decodeURIComponent(escape(atob(str.replace(/\n/g,''))));
+}
+
+let ghSyncTimer = null;
+function scheduleSave(){
+  saveToStorage();
+  clearTimeout(ghSyncTimer);
+  ghSyncTimer = setTimeout(syncToGithub, 2500);
+}
+
+async function syncToGithub(silent){
+  const cfg = loadGithubConfig();
+  if(!cfg || !cfg.token || !cfg.owner || !cfg.repo){
+    if(!silent) setSyncStatus('Configura usuario, repositorio y token primero.');
+    return;
+  }
+  setSyncStatus('Sincronizando…');
+  try{
+    const path = cfg.path || 'log.json';
+    const branch = cfg.branch || 'main';
+    const apiUrl = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${encodeURIComponent(path)}`;
+    let sha = null;
+    try{
+      const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(branch)}`, { headers: ghHeaders(cfg.token) });
+      if(getRes.ok){ const j = await getRes.json(); sha = j.sha; }
+    }catch(e){}
+    const payload = { weekTemplate, overrides, completed, logs, updatedAt: new Date().toISOString() };
+    const body = {
+      message: 'Actualizar registro de entrenamientos',
+      content: b64EncodeUtf8(JSON.stringify(payload, null, 2)),
+      branch,
+    };
+    if(sha) body.sha = sha;
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: { ...ghHeaders(cfg.token), 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if(putRes.ok){
+      setSyncStatus('Sincronizado a las ' + new Date().toLocaleTimeString());
+    } else {
+      const err = await putRes.json().catch(()=>({}));
+      setSyncStatus('Error al subir: ' + (err.message || putRes.status));
+    }
+  }catch(e){
+    setSyncStatus('Error de red al sincronizar.');
+  }
+}
+
+async function loadFromGithubRemote(){
+  const cfg = loadGithubConfig();
+  if(!cfg || !cfg.token || !cfg.owner || !cfg.repo){
+    setSyncStatus('Configura usuario, repositorio y token primero.');
+    return;
+  }
+  setSyncStatus('Cargando desde GitHub…');
+  try{
+    const path = cfg.path || 'log.json';
+    const branch = cfg.branch || 'main';
+    const apiUrl = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
+    const res = await fetch(apiUrl, { headers: ghHeaders(cfg.token) });
+    if(!res.ok){
+      setSyncStatus(res.status === 404 ? 'Aún no existe ese archivo en el repo — sincroniza primero.' : 'Error al cargar: ' + res.status);
+      return;
+    }
+    const j = await res.json();
+    const data = JSON.parse(b64DecodeUtf8(j.content));
+    if(data.weekTemplate) weekTemplate = data.weekTemplate;
+    overrides = data.overrides || {};
+    completed = data.completed || {};
+    logs = data.logs || {};
+    saveToStorage();
+    setSyncStatus('Cargado desde GitHub correctamente.');
+    render();
+  }catch(e){
+    setSyncStatus('Error al leer el archivo remoto.');
+  }
+}
+
+const store = JSON.parse(document.getElementById('data-store').textContent);
+const saved = loadFromStorage();
+let weekTemplate = saved ? saved.weekTemplate : store.weekTemplate;
+let overrides = saved ? (saved.overrides || {}) : {};
+let completed = saved ? (saved.completed || {}) : {};
+let logs = saved ? (saved.logs || {}) : {};
+
+function getLog(dateStr){
+  if(!logs[dateStr]) logs[dateStr] = { notes:'', checks:{}, ladder:{}, pace:'' };
+  return logs[dateStr];
+}
+function isItemChecked(opts, bIdx, iIdx){
+  if(opts.dateStr) return !!getLog(opts.dateStr).checks[`${bIdx}-${iIdx}`];
+  return !!checkState[`${opts.scopeKey}-${bIdx}-${iIdx}`];
+}
+function toggleItemChecked(opts, bIdx, iIdx){
+  if(opts.dateStr){
+    const log = getLog(opts.dateStr);
+    const k = `${bIdx}-${iIdx}`;
+    log.checks[k] = !log.checks[k];
+    scheduleSave();
+    return log.checks[k];
+  }
+  const k = `${opts.scopeKey}-${bIdx}-${iIdx}`;
+  checkState[k] = !checkState[k];
+  return checkState[k];
+}
+function isLadderChecked(opts, idx){
+  if(opts.dateStr) return !!getLog(opts.dateStr).ladder[idx];
+  return !!ladderState[`${opts.scopeKey}-rep-${idx}`];
+}
+function toggleLadderChecked(opts, idx){
+  if(opts.dateStr){
+    const log = getLog(opts.dateStr);
+    log.ladder[idx] = !log.ladder[idx];
+    scheduleSave();
+    return log.ladder[idx];
+  }
+  const k = `${opts.scopeKey}-rep-${idx}`;
+  ladderState[k] = !ladderState[k];
+  return ladderState[k];
+}
+
+const colorMap = {
+  accent: {bg:'var(--accent)', soft:'var(--accent-soft)'},
+  gold: {bg:'var(--gold)', soft:'var(--gold-soft)'},
+  teal: {bg:'var(--teal)', soft:'var(--teal-soft)'},
+  green:{bg:'var(--green)', soft:'var(--green-soft)'},
+};
+
+const WEEKDAY_LETTERS = ['L','M','X','J','V','S','D'];
+const MONTH_NAMES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+function pad(n){ return n<10 ? '0'+n : ''+n; }
+function isoDate(y,m,d){ return `${y}-${pad(m+1)}-${pad(d)}`; }
+function todayISO(){
+  const t = new Date();
+  return isoDate(t.getFullYear(), t.getMonth(), t.getDate());
+}
+function dowMon0(dateStr){
+  // 0 = Lunes ... 6 = Domingo
+  const d = new Date(dateStr+'T00:00:00');
+  return (d.getDay()+6)%7;
+}
+function formatLongDate(dateStr){
+  const d = new Date(dateStr+'T00:00:00');
+  const dias = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  return `${dias[d.getDay()]}, ${d.getDate()} de ${MONTH_NAMES[d.getMonth()]}`;
+}
+
+function getBaseSession(dateStr){
+  return weekTemplate[dowMon0(dateStr)];
+}
+function getEffectiveSession(dateStr){
+  return overrides[dateStr] || getBaseSession(dateStr);
+}
+function cloneSession(s){ return JSON.parse(JSON.stringify(s)); }
+
+let view = 'calendar'; // 'calendar' | 'template'
+const today = new Date();
+let calYear = today.getFullYear();
+let calMonthIdx = today.getMonth();
+let selectedDate = todayISO();
+let activeTemplateId = 'lun';
+
+let editMode = false;
+const adaptState = {};
+const checkState = {};
+const ladderState = {};
+
+/* ---------- Streak & stats ---------- */
+function currentStreak(){
+  let count = 0;
+  let d = new Date();
+  while(true){
+    const iso = isoDate(d.getFullYear(), d.getMonth(), d.getDate());
+    if(completed[iso]){ count++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return count;
+}
+function completedThisMonth(){
+  const prefix = `${calYear}-${pad(calMonthIdx+1)}`;
+  return Object.keys(completed).filter(k=>completed[k] && k.startsWith(prefix)).length;
+}
+
+/* ---------- View switching ---------- */
+function setView(v){
+  view = v;
+  editMode = false;
+  document.getElementById('tabCalendar').classList.toggle('active', v==='calendar');
+  document.getElementById('tabTemplate').classList.toggle('active', v==='template');
+  document.getElementById('dayNav').style.display = v==='template' ? 'flex' : 'none';
+  setEditToggleStyle();
+  if(v==='template') renderTemplateNav();
+  render();
+}
+document.getElementById('tabCalendar').onclick = ()=>setView('calendar');
+document.getElementById('tabTemplate').onclick = ()=>setView('template');
+
+/* ---------- Template weekday nav ---------- */
+function renderTemplateNav(){
+  const nav = document.getElementById('dayNav');
+  nav.innerHTML = '';
+  weekTemplate.forEach(d=>{
+    const c = colorMap[d.color];
+    const pill = document.createElement('div');
+    pill.className = 'pill' + (d.id===activeTemplateId ? ' active':'');
+    if(d.id===activeTemplateId){ pill.style.background = c.bg; }
+    pill.innerHTML = `<span class="dot" style="background:${c.bg}"></span>${d.name}`;
+    pill.onclick = ()=>{ activeTemplateId = d.id; renderTemplateNav(); render(); };
+    nav.appendChild(pill);
+  });
+}
+
+function setEditToggleStyle(){
+  document.getElementById('editToggle').classList.toggle('active', editMode);
+  document.getElementById('footerNote').style.display = editMode ? 'none' : 'block';
+}
+
+function makeEditable(el, onCommit){
+  el.contentEditable = 'true';
+  el.addEventListener('input', ()=>{ onCommit(el.textContent); scheduleSave(); });
+}
+
+function updateProgress(scopeKey, blockIdx){
+  const bar = document.querySelector(`.progress-bar[data-scope="${scopeKey}"][data-block="${blockIdx}"]`);
+  if(!bar) return;
+  const items = document.querySelectorAll(`.item[data-scope="${scopeKey}"][data-block="${blockIdx}"]`);
+  const total = items.length;
+  const doneCount = [...items].filter(i=>i.classList.contains('done')).length;
+  bar.style.width = total ? (doneCount/total*100)+'%' : '0%';
+}
+
+/* ---------- Session card renderer (shared by calendar + template) ---------- */
+function renderSessionCard(main, session, opts){
+  // opts: {scopeKey, adaptKey, editable, onOverrideEdit}
+  const c = colorMap[session.color];
+  const scopeKey = opts.scopeKey;
+
+  const head = document.createElement('div');
+  head.className = 'session-head';
+  const titleWrap = document.createElement('div');
+  if(opts.dateLabel){
+    const dl = document.createElement('p');
+    dl.className = 'session-date';
+    dl.textContent = opts.dateLabel;
+    titleWrap.appendChild(dl);
+  }
+  const titleEl = document.createElement('p');
+  titleEl.className = 'session-title';
+  titleEl.textContent = session.title;
+  if(editMode) makeEditable(titleEl, v=>{ session.title = v; });
+  titleWrap.appendChild(titleEl);
+  head.appendChild(titleWrap);
+
+  const badgeEl = document.createElement('span');
+  badgeEl.className = 'badge';
+  badgeEl.style.background = c.soft;
+  badgeEl.style.color = c.bg;
+  badgeEl.textContent = session.badge;
+  if(editMode) makeEditable(badgeEl, v=>{ session.badge = v; });
+  head.appendChild(badgeEl);
+  main.appendChild(head);
+
+  const sub = document.createElement('p');
+  sub.className = 'session-sub';
+  sub.textContent = session.sub;
+  if(editMode) makeEditable(sub, v=>{ session.sub = v; });
+  main.appendChild(sub);
+
+  if(opts.overrideInfo){
+    const or = document.createElement('div');
+    or.className = 'override-row';
+    or.innerHTML = `<span>${opts.overrideInfo.isOverride ? 'Este día tiene un entreno distinto al de la plantilla' : 'Usando la plantilla semanal'}</span>`;
+    if(opts.overrideInfo.isOverride){
+      const btn = document.createElement('button');
+      btn.textContent = 'Restablecer a la plantilla';
+      btn.onclick = opts.overrideInfo.onReset;
+      or.appendChild(btn);
+    }
+    main.appendChild(or);
+  }
+
+  if(opts.completeToggle){
+    const row = document.createElement('div');
+    row.className = 'complete-row';
+    const isDone = !!completed[opts.completeToggle.dateStr];
+    row.innerHTML = `<span>${isDone ? 'Entreno marcado como completado' : '¿Completaste este entreno?'}</span>`;
+    const btn = document.createElement('button');
+    btn.className = 'complete-toggle' + (isDone ? ' on':'');
+    btn.textContent = isDone ? 'Completado ✓' : 'Marcar completado';
+    btn.onclick = ()=>{
+      completed[opts.completeToggle.dateStr] = !isDone;
+      render();
+    };
+    row.appendChild(btn);
+    main.appendChild(row);
+  }
+
+  if(session.adaptable){
+    const isOn = !!adaptState[opts.adaptKey];
+    const adapt = document.createElement('div');
+    adapt.className = 'adapt' + (isOn ? ' on':'');
+    adapt.innerHTML = `<span>${isOn ? 'Modo piernas cargadas activo' : '¿Piernas cargadas hoy?'}</span>
+      <button>${isOn ? 'Volver al plan' : 'Adaptar sesión'}</button>`;
+    adapt.querySelector('button').onclick = ()=>{
+      adaptState[opts.adaptKey] = !adaptState[opts.adaptKey];
+      render();
+    };
+    main.appendChild(adapt);
+
+    if(isOn){
+      const note = document.createElement('div');
+      note.className = 'note';
+      note.style.borderLeftColor = c.bg;
+      note.textContent = session.altNote || '';
+      if(editMode) makeEditable(note, v=>{ session.altNote = v; });
+      main.appendChild(note);
+    }
+  }
+
+  if(!session.adaptable || !adaptState[opts.adaptKey]){
+    session.blocks.forEach((block, bIdx)=>{
+      const wrap = document.createElement('div');
+      wrap.className = 'block';
+
+      const bh = document.createElement('div');
+      bh.className = 'block-head';
+      const bt = document.createElement('p');
+      bt.className = 'block-title';
+      bt.textContent = block.title;
+      if(editMode) makeEditable(bt, v=>{ block.title = v; });
+      bh.appendChild(bt);
+      if(editMode){
+        const delBlock = document.createElement('button');
+        delBlock.className = 'del-block';
+        delBlock.textContent = '×';
+        delBlock.onclick = ()=>{ session.blocks.splice(bIdx,1); render(); };
+        bh.appendChild(delBlock);
+      }
+      wrap.appendChild(bh);
+
+      const pw = document.createElement('div');
+      pw.className = 'progress-wrap';
+      const pb = document.createElement('div');
+      pb.className = 'progress-bar';
+      pb.dataset.scope = scopeKey;
+      pb.dataset.block = bIdx;
+      pb.style.background = c.bg;
+      pw.appendChild(pb);
+      wrap.appendChild(pw);
+
+      block.items.forEach((item, iIdx)=>{
+        const isChecked = isItemChecked(opts, bIdx, iIdx);
+        const el = document.createElement('div');
+        el.className = 'item' + (isChecked ? ' done':'');
+        el.dataset.scope = scopeKey;
+        el.dataset.block = bIdx;
+
+        const checkEl = document.createElement('div');
+        checkEl.className = 'check';
+        if(isChecked){ checkEl.style.background = c.bg; checkEl.style.borderColor = c.bg; }
+        checkEl.innerHTML = CHECK_SVG;
+        checkEl.onclick = ()=>{
+          const nowChecked = toggleItemChecked(opts, bIdx, iIdx);
+          el.classList.toggle('done', nowChecked);
+          checkEl.style.background = nowChecked ? c.bg : '';
+          checkEl.style.borderColor = nowChecked ? c.bg : '';
+          updateProgress(scopeKey, bIdx);
+        };
+        el.appendChild(checkEl);
+
+        const body = document.createElement('div');
+        body.className = 'item-body';
+        const exEl = document.createElement('p');
+        exEl.className = 'ex-name';
+        exEl.textContent = item.ex;
+        const detEl = document.createElement('p');
+        detEl.className = 'ex-detail';
+        detEl.textContent = item.detail;
+        if(editMode){
+          makeEditable(exEl, v=>{ item.ex = v; });
+          makeEditable(detEl, v=>{ item.detail = v; });
+        }
+        body.appendChild(exEl);
+        body.appendChild(detEl);
+        el.appendChild(body);
+
+        if(editMode){
+          const delItem = document.createElement('button');
+          delItem.className = 'del-item';
+          delItem.textContent = '×';
+          delItem.onclick = ()=>{ block.items.splice(iIdx,1); render(); };
+          el.appendChild(delItem);
+        }
+
+        wrap.appendChild(el);
+      });
+
+      if(editMode){
+        const addItem = document.createElement('div');
+        addItem.className = 'add-row';
+        addItem.textContent = '+ Añadir ejercicio';
+        addItem.onclick = ()=>{
+          block.items.push({ex:'Nuevo ejercicio', detail:'Detalle / reps'});
+          render();
+        };
+        wrap.appendChild(addItem);
+      }
+
+      main.appendChild(wrap);
+      requestAnimationFrame(()=>updateProgress(scopeKey, bIdx));
+    });
+
+    if(editMode){
+      const addBlock = document.createElement('div');
+      addBlock.className = 'add-row add-block-row';
+      addBlock.textContent = '+ Añadir bloque';
+      addBlock.onclick = ()=>{
+        session.blocks.push({title:'Nuevo bloque', items:[]});
+        render();
+      };
+      main.appendChild(addBlock);
+    }
+  }
+
+  if(session.ladder){
+    const lbl = document.createElement('p');
+    lbl.className = 'block-title';
+    lbl.textContent = session.ladderLabel;
+    main.appendChild(lbl);
+
+    const ladder = document.createElement('div');
+    ladder.className = 'ladder';
+    for(let i=1;i<=session.ladder;i++){
+      const box = document.createElement('div');
+      const on = isLadderChecked(opts, i);
+      box.className = 'rep-box' + (on ? ' done':'');
+      box.textContent = i;
+      box.onclick = ()=>{
+        const nowOn = toggleLadderChecked(opts, i);
+        box.classList.toggle('done', nowOn);
+      };
+      ladder.appendChild(box);
+    }
+    main.appendChild(ladder);
+  }
+
+  if(session.pace){
+    const pi = document.createElement('div');
+    pi.className = 'paceinput';
+    const currentPace = opts.dateStr ? (getLog(opts.dateStr).pace || '') : '';
+    pi.innerHTML = `<label>Ritmo real de hoy (min:seg por 800m)</label><input type="text" placeholder="3:10" value="${currentPace}">`;
+    const paceInputEl = pi.querySelector('input');
+    if(opts.dateStr){
+      paceInputEl.addEventListener('input', ()=>{
+        getLog(opts.dateStr).pace = paceInputEl.value;
+        scheduleSave();
+      });
+    }
+    main.appendChild(pi);
+  }
+
+  if(session.note){
+    const note = document.createElement('div');
+    note.className = 'note';
+    note.style.borderLeftColor = c.bg;
+    note.textContent = session.note;
+    if(editMode) makeEditable(note, v=>{ session.note = v; });
+    main.appendChild(note);
+  }
+
+  if(opts.dateStr){
+    const notesWrap = document.createElement('div');
+    notesWrap.className = 'daynotes';
+    notesWrap.innerHTML = `<p class="block-title">Notas de este día</p>
+      <textarea placeholder="Sensaciones, tiempos, series reales, lo que quieras dejar anotado...">${getLog(opts.dateStr).notes || ''}</textarea>`;
+    const ta = notesWrap.querySelector('textarea');
+    ta.addEventListener('input', ()=>{
+      getLog(opts.dateStr).notes = ta.value;
+      scheduleSave();
+    });
+    main.appendChild(notesWrap);
+  }
+}
+
+/* ---------- Calendar view ---------- */
+function renderCalendarView(main){
+  const stats = document.createElement('div');
+  stats.className = 'cal-stats';
+  stats.innerHTML = `
+    <div class="cal-stat streak">
+      <div class="val">${ICONS.flame.replace('<svg ', '<svg style="width:15px;height:15px" ')}${currentStreak()}</div>
+      <div class="lab">Racha de días</div>
+    </div>
+    <div class="cal-stat">
+      <div class="val">${completedThisMonth()}</div>
+      <div class="lab">Completados este mes</div>
+    </div>
+  `;
+  main.appendChild(stats);
+
+  const nav = document.createElement('div');
+  nav.className = 'month-nav';
+  nav.innerHTML = `
+    <h2>${MONTH_NAMES[calMonthIdx]} ${calYear}</h2>
+    <div class="arrows">
+      <button class="today-btn" id="todayBtn">Hoy</button>
+      <div class="nav-btn" id="prevMonth"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="nav-btn" id="nextMonth"><svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+  `;
+  main.appendChild(nav);
+  nav.querySelector('#prevMonth').onclick = ()=>{
+    calMonthIdx--; if(calMonthIdx<0){calMonthIdx=11;calYear--;}
+    render();
+  };
+  nav.querySelector('#nextMonth').onclick = ()=>{
+    calMonthIdx++; if(calMonthIdx>11){calMonthIdx=0;calYear++;}
+    render();
+  };
+  nav.querySelector('#todayBtn').onclick = ()=>{
+    calYear = today.getFullYear(); calMonthIdx = today.getMonth(); selectedDate = todayISO();
+    render();
+  };
+
+  const wr = document.createElement('div');
+  wr.className = 'weekday-row';
+  WEEKDAY_LETTERS.forEach(l=>{
+    const s = document.createElement('span'); s.textContent = l; wr.appendChild(s);
+  });
+  main.appendChild(wr);
+
+  const grid = document.createElement('div');
+  grid.className = 'cal-grid';
+
+  const firstOfMonth = new Date(calYear, calMonthIdx, 1);
+  const startOffset = (firstOfMonth.getDay()+6)%7; // 0=Lunes
+  const gridStart = new Date(calYear, calMonthIdx, 1 - startOffset);
+  const todayStr = todayISO();
+
+  for(let i=0;i<42;i++){
+    const cellDate = new Date(gridStart);
+    cellDate.setDate(gridStart.getDate()+i);
+    const dateStr = isoDate(cellDate.getFullYear(), cellDate.getMonth(), cellDate.getDate());
+    const inMonth = cellDate.getMonth() === calMonthIdx;
+    const isFuture = dateStr > todayStr;
+    const dim = !inMonth && isFuture;
+
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell';
+
+    const day = document.createElement('div');
+    const session = getEffectiveSession(dateStr);
+    const c = colorMap[session.color];
+    const isDone = !!completed[dateStr];
+
+    let cls = 'cal-day';
+    if(dim) cls += ' dim';
+    if(dateStr === todayStr) cls += ' today';
+    if(dateStr === selectedDate) cls += ' selected';
+    if(isDone) cls += ' done';
+    if(isDone && session.icon==='flame') cls += ' icon-flame';
+    day.className = cls;
+
+    if(isDone){
+      day.style.background = c.bg;
+      day.innerHTML = ICONS[session.icon] || cellDate.getDate();
+    } else {
+      day.textContent = cellDate.getDate();
+    }
+
+    day.onclick = ()=>{ selectedDate = dateStr; render(); };
+    cell.appendChild(day);
+    grid.appendChild(cell);
+  }
+  main.appendChild(grid);
+
+  // Selected day detail
+  const session = cloneForDisplay(selectedDate);
+  const isOverride = !!overrides[selectedDate];
+
+  if(editMode && !isOverride){
+    // al entrar en modo edición sobre un día sin override, clonamos para no tocar la plantilla
+    overrides[selectedDate] = cloneSession(getBaseSession(selectedDate));
+  }
+  const effective = getEffectiveSession(selectedDate);
+
+  renderSessionCard(main, effective, {
+    scopeKey: 'cal-'+selectedDate,
+    adaptKey: 'cal-'+selectedDate,
+    dateStr: selectedDate,
+    dateLabel: formatLongDate(selectedDate),
+    overrideInfo: {
+      isOverride: !!overrides[selectedDate],
+      onReset: ()=>{ delete overrides[selectedDate]; render(); }
+    },
+    completeToggle: { dateStr: selectedDate }
+  });
+}
+
+function cloneForDisplay(dateStr){
+  return getEffectiveSession(dateStr);
+}
+
+/* ---------- Template view ---------- */
+function renderTemplateView(main){
+  const day = weekTemplate.find(d=>d.id===activeTemplateId);
+  renderSessionCard(main, day, {
+    scopeKey: 'tpl-'+day.id,
+    adaptKey: 'tpl-'+day.id
+  });
+}
+
+/* ---------- Main render ---------- */
+function render(){
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  main.classList.toggle('editing', editMode);
+
+  if(view==='calendar') renderCalendarView(main);
+  else renderTemplateView(main);
+
+  renderEditBar();
+  scheduleSave();
+}
+
+function renderEditBar(){
+  const existing = document.getElementById('editBar');
+  if(existing) existing.remove();
+  if(!editMode) return;
+  const bar = document.createElement('div');
+  bar.className = 'edit-bar';
+  bar.id = 'editBar';
+  bar.innerHTML = `
+    <button class="done">Terminar edición</button>
+    <button class="save">Descargar copia de seguridad</button>
+  `;
+  bar.querySelector('.done').onclick = ()=>{ editMode = false; setEditToggleStyle(); render(); };
+  bar.querySelector('.save').onclick = downloadEditedFile;
+  document.body.appendChild(bar);
+}
+
+async function downloadEditedFile(){
+  const newData = { weekTemplate, overrides, completed, logs };
+  const newJson = JSON.stringify(newData, null, 2);
+  const newHtml = PRISTINE_HTML.replace(
+    /(<script type="application\/json" id="data-store">)[\s\S]*?(<\/script>)/,
+    (m, a, b) => a + newJson + b
+  );
+  const downloads = (window.claude && typeof window.claude.use === 'function')
+    ? await window.claude.use('downloads')
+    : null;
+  if(downloads){
+    try{
+      await downloads.save({ filename: 'index.html', data: new Blob([newHtml], {type:'text/html'}) });
+    }catch(e){ /* el visor canceló o rechazó el guardado */ }
+    return;
+  }
+  const blob = new Blob([newHtml], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'index.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('editToggle').onclick = ()=>{
+  editMode = !editMode;
+  setEditToggleStyle();
+  render();
+};
+document.getElementById('saveBtn').onclick = downloadEditedFile;
+
+/* ---------- Modal GitHub ---------- */
+const ghModal = document.getElementById('ghModal');
+
+function openGithubModal(){
+  const cfg = loadGithubConfig() || {};
+  document.getElementById('ghOwner').value = cfg.owner || '';
+  document.getElementById('ghRepo').value = cfg.repo || '';
+  document.getElementById('ghBranch').value = cfg.branch || 'main';
+  document.getElementById('ghPath').value = cfg.path || 'log.json';
+  document.getElementById('ghToken').value = cfg.token || '';
+  setSyncStatus(cfg.token && cfg.owner && cfg.repo ? 'Configurado. Listo para sincronizar.' : 'Sin configurar');
+  ghModal.classList.add('open');
+}
+function readGithubForm(){
+  return {
+    owner: document.getElementById('ghOwner').value.trim(),
+    repo: document.getElementById('ghRepo').value.trim(),
+    branch: document.getElementById('ghBranch').value.trim() || 'main',
+    path: document.getElementById('ghPath').value.trim() || 'log.json',
+    token: document.getElementById('ghToken').value.trim(),
+  };
+}
+
+document.getElementById('syncBtn').onclick = openGithubModal;
+document.getElementById('ghClose').onclick = ()=> ghModal.classList.remove('open');
+document.getElementById('ghSaveCfg').onclick = ()=>{
+  saveGithubConfig(readGithubForm());
+  setSyncStatus('Configuración guardada.');
+};
+document.getElementById('ghSyncNow').onclick = ()=>{
+  saveGithubConfig(readGithubForm());
+  syncToGithub();
+};
+document.getElementById('ghLoadNow').onclick = ()=>{
+  saveGithubConfig(readGithubForm());
+  loadFromGithubRemote();
+};
+
+setView('calendar');
+</script>
+
+</body>
+</html>
