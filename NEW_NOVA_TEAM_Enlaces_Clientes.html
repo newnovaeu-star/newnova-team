@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEW NØVA TEAM · Enlaces de clientes</title>
+<style>
+:root{--bg:#0E0E0E;--surface:#1C1C1E;--surface2:#262628;--border:#3A3A3C;--text:#F3F2EF;--muted:#9C9A95;--olive:#4F554A;--sage:#9BA58C}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,Helvetica,sans-serif;line-height:1.5}
+.top{padding:20px 28px;border-bottom:1px solid var(--border);font-family:'Arial Narrow',Arial,sans-serif;letter-spacing:.42em;font-size:16px}
+.top small{display:block;font:10px 'Courier New',monospace;letter-spacing:.6em;color:var(--sage);margin-top:6px}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 60px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media(max-width:860px){.wrap{grid-template-columns:1fr}}
+h3{font:11px 'Courier New',monospace;letter-spacing:.22em;color:var(--sage);margin:0 0 12px;font-weight:400;text-transform:uppercase}
+label{display:block;font-size:12px;color:var(--muted);margin:12px 0 5px}
+input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px 11px;font:inherit;font-size:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--olive);border-radius:12px;padding:16px;margin-bottom:16px}
+.card b.n{font-size:15px}
+ol{padding-left:20px;margin:0;font-size:13.5px}li{margin-bottom:9px;color:#D8D6D2}li b{color:var(--text)}
+code{background:var(--surface2);padding:1px 6px;border-radius:5px;font-size:12.5px}
+button{cursor:pointer;border:0;border-radius:9px;padding:10px 14px;font:inherit;font-weight:600;font-size:13px;background:var(--text);color:var(--bg);margin:8px 8px 0 0}
+button.g{background:transparent;color:var(--text);border:1px solid var(--border)}
+.out{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;font:12px 'Courier New',monospace;word-break:break-all;color:#D8D6D2;margin-top:10px;min-height:40px}
+.warn{background:var(--olive);border-radius:8px;padding:10px 12px;font-size:12.5px;margin-top:12px}
+.toast{position:fixed;right:18px;bottom:18px;background:var(--surface2);border:1px solid var(--border);padding:12px 16px;border-radius:10px;font-size:13px;display:none}
+</style></head><body>
+<div class="top">NEW NØVA<small>T E A M · ENLACES DE CLIENTES</small></div>
+<div class="wrap">
+ <div>
+  <h3>1 · Tus datos de GitHub</h3>
+  <label>Usuario de GitHub</label><input id="owner" placeholder="tu-usuario" autocapitalize="off">
+  <label>Dirección donde estarán las apps (GitHub Pages)</label><input id="base" placeholder="https://tu-usuario.github.io/new-nova-team/">
+  <h3 style="margin-top:26px">2 · Un repositorio privado y un token por cliente</h3>
+  <div class="card" data-c="lorena" data-name="Lorena" data-file="lorena.html">
+   <b class="n">Lorena</b>
+   <label>Repositorio privado de sus datos</label><input class="repo" value="nova-lorena">
+   <label>Token (github_pat_…) de ese repositorio</label><input class="tok" type="password" placeholder="github_pat_...">
+  </div>
+  <div class="card" data-c="josemanuel" data-name="José Manuel" data-file="josemanuel.html">
+   <b class="n">José Manuel</b>
+   <label>Repositorio privado de sus datos</label><input class="repo" value="nova-josemanuel">
+   <label>Token (github_pat_…) de ese repositorio</label><input class="tok" type="password" placeholder="github_pat_...">
+  </div>
+  <div class="card" data-c="laura" data-name="Laura" data-file="laura.html">
+   <b class="n">Laura</b>
+   <label>Repositorio privado de sus datos</label><input class="repo" value="nova-laura">
+   <label>Token (github_pat_…) de ese repositorio</label><input class="tok" type="password" placeholder="github_pat_...">
+  </div>
+  <div class="warn">Los tokens solo viven en esta pantalla: no se guardan ni se envían a ningún sitio. No los pegues nunca dentro de los archivos que subas a GitHub.</div>
+ </div>
+ <div>
+  <h3>3 · Enlaces y mensajes para WhatsApp</h3>
+  <div id="results"></div>
+  <h3 style="margin-top:26px">Cómo montarlo (una vez)</h3>
+  <ol>
+   <li><b>Repositorio de las apps:</b> crea <code>new-nova-team</code>, sube <code>lorena.html</code>, <code>josemanuel.html</code> y <code>laura.html</code>, y activa Settings → Pages (rama <code>main</code>, carpeta raíz).</li>
+   <li><b>Un repositorio privado por cliente:</b> <code>nova-lorena</code>, <code>nova-josemanuel</code>, <code>nova-laura</code>. Ahí se guardará su progreso.</li>
+   <li><b>Un token por cliente:</b> GitHub → Settings → Developer settings → Fine-grained tokens. Acceso solo a su repositorio y permiso <i>Contents: Read and write</i>.</li>
+   <li><b>Pégalos aquí</b> y envía a cada uno su enlace por WhatsApp.</li>
+   <li><b>Tú ves su progreso</b> en <code>data/&lt;cliente&gt;.json</code> de su repositorio.</li>
+  </ol>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $=s=>document.querySelector(s);
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(()=>t.style.display='none',2800);}
+async function copy(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}a.remove();return ok}}
+function base(){let b=$('#base').value.trim(); if(!b){const o=$('#owner').value.trim(); if(o) b='https://'+o+'.github.io/new-nova-team/';} if(b&&!b.endsWith('/')) b+='/'; return b;}
+function link(card){
+  const o=$('#owner').value.trim(), b=base(), repo=card.querySelector('.repo').value.trim(), tok=card.querySelector('.tok').value.trim();
+  if(!o||!b||!repo||!tok) return '';
+  const p=new URLSearchParams({t:tok,o:o,r:repo,p:'data/'+card.dataset.c+'.json'});
+  return b+card.dataset.file+'#'+p.toString();
+}
+function msg(card,l){
+  return `Hola ${card.dataset.name}, esta es tu app de NEW NØVA TEAM:\n${l}\n\nÁbrela y guárdala en tu pantalla de inicio (iPhone: Compartir → Añadir a pantalla de inicio · Android: menú ⋮ → Añadir a pantalla de inicio).\n\nTodo lo que marques o escribas se guarda solo y se sincroniza. Este enlace es solo tuyo: no lo compartas.\n\nDirection over noise.\nHéctor · NEW NØVA TEAM`;
+}
+function render(){
+  const R=$('#results'); R.innerHTML='';
+  document.querySelectorAll('.card').forEach(card=>{
+    const l=link(card); const d=document.createElement('div'); d.className='card';
+    d.innerHTML='<b class="n"></b><div class="out"></div><button class="c1">Copiar enlace</button><button class="g c2">Copiar mensaje de WhatsApp</button>';
+    d.querySelector('.n').textContent=card.dataset.name;
+    d.querySelector('.out').textContent=l||'Rellena usuario, dirección, repositorio y token.';
+    d.querySelector('.c1').disabled=!l; d.querySelector('.c2').disabled=!l;
+    d.querySelector('.c1').onclick=async()=>toast((await copy(l))?'Enlace copiado':'No se pudo copiar');
+    d.querySelector('.c2').onclick=async()=>toast((await copy(msg(card,l)))?'Mensaje copiado':'No se pudo copiar');
+    R.appendChild(d);
+  });
+}
+document.querySelectorAll('input').forEach(i=>i.addEventListener('input',render)); render();
+</script></body></html>
